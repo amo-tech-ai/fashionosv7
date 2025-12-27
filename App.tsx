@@ -1,19 +1,49 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { IntelligencePanel } from './components/IntelligencePanel';
 import { Dashboard } from './pages/Dashboard';
 import { CRM, mockContacts } from './pages/CRM';
 import { Analysis } from './pages/Analysis';
-import { NavigationItem } from './types';
+import { BrandOnboarding } from './pages/BrandOnboarding';
+import { Shoots } from './pages/Shoots';
+import { NavigationItem, BrandProfile } from './types';
+
+const DEFAULT_MAISON: BrandProfile = {
+  id: 'demo-maison',
+  name: "L'Artisan",
+  description: "A heritage luxury maison focused on avant-garde silhouettes and architectural purity.",
+  website: "lartisan-paris.com",
+  dna: {
+    colorPalette: ['#000000', '#FFFFFF', '#F5F5F5', '#222222', '#D4AF37'],
+    lightingStyle: "Chiaroscuro / Cinematic High-Contrast",
+    compositionRules: ["Negative Space Mastery", "Vertical Symmetry", "Macro Detail Focus"],
+    motifs: ["Architectural Purity", "Monolithic Forms", "Tactile Minimalism"],
+    luxuryTier: 'Ultra-Luxury'
+  },
+  channels: [
+    { type: 'Official', url: 'https://lartisan-paris.com', verified: true, confidence: 1.0 },
+    { type: 'Instagram', url: 'https://instagram.com/lartisan', verified: true, confidence: 0.98 }
+  ],
+  npi: { 
+    total: 92, 
+    breakdown: { clarity: 94, reach: 88, readiness: 95, consistency: 91 }, 
+    summary: "The Maison maintains exceptional brand resonance. Digital readiness for SS25 is in the top decile." 
+  },
+  personas: ["The Cultural Architect", "The Intellectual Minimalist"],
+  pillars: ["Architectural Integrity", "Textural Narrative", "Ancestral Future"]
+};
 
 const App: React.FC = () => {
   const [activeItem, setActiveItem] = useState<NavigationItem>('Dashboard');
   const [showIntelligence, setShowIntelligence] = useState(true);
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
+  const [maison, setMaison] = useState<BrandProfile>(() => {
+    const saved = localStorage.getItem('fashionos_maison');
+    return saved ? JSON.parse(saved) : DEFAULT_MAISON;
+  });
 
-  // Clear contact selection if moving away from CRM
   const handleNavChange = (item: NavigationItem) => {
     setActiveItem(item);
     if (item !== 'CRM') {
@@ -21,9 +51,15 @@ const App: React.FC = () => {
     }
   };
 
+  const handleOnboardingComplete = (profile: BrandProfile) => {
+    setMaison(profile);
+    localStorage.setItem('fashionos_maison', JSON.stringify(profile));
+    setActiveItem('Dashboard');
+  };
+
   const selectedContact = useMemo(() => 
     mockContacts.find(c => c.id === selectedContactId), 
-    [selectedContactId, mockContacts]
+    [selectedContactId]
   );
 
   const renderMainContent = () => {
@@ -34,6 +70,10 @@ const App: React.FC = () => {
         return <CRM onSelectContact={setSelectedContactId} selectedContactId={selectedContactId} />;
       case 'Analysis':
         return <Analysis />;
+      case 'Shoots':
+        return <Shoots />;
+      case 'Profile':
+        return <BrandOnboarding onComplete={handleOnboardingComplete} />;
       default:
         return (
           <div className="flex-1 flex items-center justify-center bg-[#fcfcfc] animate-in fade-in duration-700">
@@ -59,15 +99,12 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full bg-[#fcfcfc] text-black overflow-hidden font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      {/* Left Panel - Context */}
-      <Sidebar activeItem={activeItem} setActiveItem={handleNavChange} />
+      <Sidebar activeItem={activeItem} setActiveItem={handleNavChange} maisonName={maison.name} />
       
-      {/* Main Panel - Work */}
       <main className="flex-1 flex flex-col relative overflow-hidden bg-[#fcfcfc]">
         {renderMainContent()}
       </main>
 
-      {/* Right Panel - Intelligence / Contact Profile */}
       <IntelligencePanel 
         isVisible={showIntelligence} 
         onClose={() => setShowIntelligence(false)} 
@@ -76,7 +113,6 @@ const App: React.FC = () => {
         onClearSelection={() => setSelectedContactId(null)}
       />
 
-      {/* Toggle Mobile Intelligence */}
       {!showIntelligence && (
         <button 
           onClick={() => setShowIntelligence(true)}

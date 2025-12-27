@@ -1,23 +1,16 @@
+
 import React from 'react';
 import { 
-  LayoutDashboard, 
-  Users, 
-  BarChart3, 
-  UserCircle, 
-  Calendar, 
-  Camera, 
-  Sparkles, 
-  Megaphone, 
-  Image as ImageIcon, 
-  MessageSquare, 
-  Settings,
-  Menu
+  LayoutDashboard, Users, BarChart3, UserCircle, Calendar, 
+  Camera, Sparkles, Megaphone, Image as ImageIcon, MessageSquare, 
+  Settings, Menu
 } from 'lucide-react';
 import { NavigationItem } from '../types';
 
 interface SidebarProps {
   activeItem: NavigationItem;
   setActiveItem: (item: NavigationItem) => void;
+  maisonName?: string;
 }
 
 const navItems: { label: NavigationItem; icon: React.ReactNode }[] = [
@@ -34,7 +27,7 @@ const navItems: { label: NavigationItem; icon: React.ReactNode }[] = [
   { label: 'Settings', icon: <Settings size={18} /> },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem, maisonName }) => {
   return (
     <aside className="w-64 border-r border-gray-100 flex flex-col bg-white h-screen">
       <div className="p-8 flex items-center justify-between">
@@ -64,10 +57,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeItem, setActiveItem }) =
       <div className="p-8 mt-auto border-t border-gray-50">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-            <img src="https://picsum.photos/seed/fashion/100/100" alt="Profile" />
+            <img src={`https://picsum.photos/seed/${maisonName}/100/100`} alt="Profile" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-black uppercase tracking-widest">L'Artisan</p>
+            <p className="text-xs font-semibold text-black uppercase tracking-widest truncate w-32">
+              {maisonName || "L'Artisan"}
+            </p>
             <p className="text-[10px] text-gray-400">MAISON TIERS I</p>
           </div>
         </div>

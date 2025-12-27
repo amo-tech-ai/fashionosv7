@@ -12,59 +12,75 @@ export type NavigationItem =
   | 'Concierge'
   | 'Settings';
 
-export interface BrandMetric {
-  label: string;
-  value: string;
-  trend: 'up' | 'down' | 'neutral';
+export interface BrandDNA {
+  colorPalette: string[];
+  lightingStyle: string;
+  compositionRules: string[];
+  motifs: string[];
+  luxuryTier: 'Ultra-Luxury' | 'Luxury' | 'Contemporary' | 'Premium' | 'High-Street';
 }
 
-export interface Task {
+export interface ChannelNode {
+  type: 'Amazon' | 'Shopify' | 'Instagram' | 'TikTok' | 'Pinterest' | 'Official';
+  url: string;
+  verified: boolean;
+  confidence: number;
+}
+
+export interface NPIScore {
+  total: number;
+  breakdown: {
+    clarity: number;
+    reach: number;
+    readiness: number;
+    consistency: number;
+  };
+  summary: string;
+}
+
+export interface BrandProfile {
+  id: string;
+  name: string;
+  description: string;
+  website: string;
+  dna: BrandDNA;
+  channels: ChannelNode[];
+  npi: NPIScore;
+  personas: string[];
+  pillars: string[];
+}
+
+// Shoot System Types
+export type ShootStatus = 'Draft' | 'Planned' | 'In Progress' | 'Post-Production' | 'Completed';
+
+export interface ShotItem {
+  id: string;
+  description: string;
+  lighting: string;
+  framing: string;
+  dnaAlignment: number; // 0-100
+  status: 'Pending' | 'Captured' | 'Rejected';
+}
+
+export interface Shoot {
   id: string;
   title: string;
-  dueDate: string;
-  completed: boolean;
-  priority: 'low' | 'medium' | 'high';
+  date: string;
+  location: string;
+  status: ShootStatus;
+  concept: string;
+  shotList: ShotItem[];
+  dnaSnapshot: BrandDNA; // Locked DNA at time of shoot creation
 }
 
-export interface IntelligenceInsight {
-  type: 'action' | 'warning' | 'info';
-  title: string;
-  description: string;
-}
-
-// CRM Specific Types
+// CRM & Global Types
 export type ContactCategory = 'Designer' | 'Buyer' | 'Press' | 'Sponsor';
 export type ContactStatus = 'Active' | 'Lead' | 'Archive';
 
-export interface Socials {
-  instagram?: string;
-  linkedin?: string;
-  twitter?: string;
-}
-
-export interface InteractionLog {
-  id: string;
-  type: 'Note' | 'Call' | 'Meeting' | 'Email' | 'RSVP' | 'Placement';
-  title: string;
-  description: string;
-  date: string;
-}
-
-export interface Deal {
-  id: string;
-  title: string;
-  value: string;
-  stage: 'Prospect' | 'Negotiation' | 'Contracting' | 'Closed';
-  projectedClose: string;
-  linkedCollection?: string;
-}
-
-export interface RSVPEntry {
-  eventId: string;
-  eventName: string;
-  status: 'Invited' | 'Confirmed' | 'Attended' | 'Declined';
-}
-
+export interface Socials { instagram?: string; linkedin?: string; twitter?: string; }
+export interface InteractionLog { id: string; type: string; title: string; description: string; date: string; }
+export interface Deal { id: string; title: string; value: string; stage: string; projectedClose: string; }
+export interface RSVPEntry { eventId: string; eventName: string; status: string; }
 export interface Contact {
   id: string;
   name: string;
