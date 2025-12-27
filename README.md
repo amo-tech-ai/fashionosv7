@@ -1,11 +1,41 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# FashionOS Architecture
 
-  <h1>Built with AI Studio</h2>
+## 🧠 Mental Model: The 3-Panel System
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+### Left: Context
+- Purpose: Navigation and Domain switching.
+- Scale: Enables effortless management of multiple brand layers (DNA, Shoots, Events).
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+### Main: Work
+- Purpose: High-fidelity focus area for human creation and review.
+- Philosophy: Human-first execution aided by AI tools.
 
-</div>
+### Right: Intelligence
+- Purpose: Proactive AI-driven insights, collaborative monitoring, and risk management.
+- Integration: Gemini Flash 3.0 provides real-time trend analysis and "Style Compliance" audits.
+
+## 🗺️ Diagrams
+
+### Universal System
+```mermaid
+graph LR
+  L[Left: Context] --> M[Main: Work]
+  M <--> R[Right: Intelligence]
+```
+
+### Fashion Workflow
+```mermaid
+graph TD
+  CRM[CRM Contact] --> Event[Event]
+  Event --> Shoot[Shoot]
+  Shoot --> Media[Media Assets]
+  Media --> Campaign[Campaign]
+  Campaign --> Analysis[Insights]
+```
+
+## AI Strategy
+FashionOS uses Gemini Flash 3.0 for:
+1. **Trend Resonance:** Analyzing current SS25 performance vs Brand DNA.
+2. **Conflict Detection:** Identifying overlaps in shoot calendars and event venues.
+3. **Strategic Audits:** Ensuring all "Critical Path" tasks align with the season's aesthetic goals.

@@ -1,0 +1,8 @@
+{
+  "name": "FashionOS",
+  "description": "An intelligent operating system for fashion brands, agencies, and events, featuring a luxury 3-panel dashboard with integrated AI intelligence.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
