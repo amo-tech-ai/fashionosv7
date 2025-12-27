@@ -23,7 +23,7 @@ const App: React.FC = () => {
 
   const selectedContact = useMemo(() => 
     mockContacts.find(c => c.id === selectedContactId), 
-    [selectedContactId]
+    [selectedContactId, mockContacts]
   );
 
   const renderMainContent = () => {
@@ -36,13 +36,18 @@ const App: React.FC = () => {
         return <Analysis />;
       default:
         return (
-          <div className="flex-1 flex items-center justify-center bg-gray-50">
-            <div className="text-center p-12 bg-white rounded-3xl border border-gray-100 shadow-sm">
-              <h2 className="text-3xl font-serif mb-4">{activeItem}</h2>
-              <p className="text-gray-400 max-w-xs mx-auto">This module is currently initializing in the neural mesh. Please check back shortly.</p>
+          <div className="flex-1 flex items-center justify-center bg-[#fcfcfc] animate-in fade-in duration-700">
+            <div className="text-center p-16 bg-white rounded-[40px] border border-gray-100 shadow-xl max-w-md mx-auto">
+              <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                 <Sparkles size={24} className="text-gray-300" />
+              </div>
+              <h2 className="text-3xl font-serif mb-4 leading-tight">{activeItem} Module</h2>
+              <p className="text-gray-400 font-light leading-relaxed mb-10 italic">
+                "System unit is initializing in the neural mesh. This domain will be accessible shortly."
+              </p>
               <button 
                 onClick={() => handleNavChange('Dashboard')}
-                className="mt-8 px-6 py-2 bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded-full"
+                className="w-full py-4 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg hover:bg-zinc-800 transition-all"
               >
                 Return to Command
               </button>
@@ -53,12 +58,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#fcfcfc] text-black overflow-hidden">
+    <div className="flex h-screen w-full bg-[#fcfcfc] text-black overflow-hidden font-sans selection:bg-indigo-100 selection:text-indigo-900">
       {/* Left Panel - Context */}
       <Sidebar activeItem={activeItem} setActiveItem={handleNavChange} />
       
       {/* Main Panel - Work */}
-      <main className="flex-1 flex flex-col relative overflow-hidden">
+      <main className="flex-1 flex flex-col relative overflow-hidden bg-[#fcfcfc]">
         {renderMainContent()}
       </main>
 
@@ -75,9 +80,9 @@ const App: React.FC = () => {
       {!showIntelligence && (
         <button 
           onClick={() => setShowIntelligence(true)}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-lg z-50 lg:hidden"
+          className="fixed bottom-10 right-10 w-14 h-14 bg-black text-white rounded-full flex items-center justify-center shadow-2xl z-50 lg:hidden hover:scale-110 active:scale-95 transition-all"
         >
-          <Sparkles size={20} />
+          <Sparkles size={24} />
         </button>
       )}
     </div>

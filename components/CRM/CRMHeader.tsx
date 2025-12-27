@@ -5,9 +5,10 @@ import { Search, UserPlus } from 'lucide-react';
 interface CRMHeaderProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  onAddClick?: () => void;
 }
 
-export const CRMHeader: React.FC<CRMHeaderProps> = ({ searchQuery, setSearchQuery }) => {
+export const CRMHeader: React.FC<CRMHeaderProps> = ({ searchQuery, setSearchQuery, onAddClick }) => {
   return (
     <header className="flex items-center justify-between mb-12">
       <div>
@@ -19,8 +20,8 @@ export const CRMHeader: React.FC<CRMHeaderProps> = ({ searchQuery, setSearchQuer
         </p>
       </div>
       <div className="flex items-center space-x-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={16} />
           <input 
             type="text" 
             value={searchQuery}
@@ -29,7 +30,10 @@ export const CRMHeader: React.FC<CRMHeaderProps> = ({ searchQuery, setSearchQuer
             className="pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm w-64 focus:outline-none focus:ring-1 focus:ring-black transition-all"
           />
         </div>
-        <button className="px-6 py-2 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center space-x-2">
+        <button 
+          onClick={onAddClick}
+          className="px-6 py-2 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center space-x-2 shadow-sm"
+        >
           <UserPlus size={14} />
           <span>Add Contact</span>
         </button>
