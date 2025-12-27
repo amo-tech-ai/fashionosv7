@@ -1,23 +1,37 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Sparkles } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { IntelligencePanel } from './components/IntelligencePanel';
 import { Dashboard } from './pages/Dashboard';
-import { CRM } from './pages/CRM';
+import { CRM, mockContacts } from './pages/CRM';
 import { Analysis } from './pages/Analysis';
 import { NavigationItem } from './types';
 
 const App: React.FC = () => {
   const [activeItem, setActiveItem] = useState<NavigationItem>('Dashboard');
   const [showIntelligence, setShowIntelligence] = useState(true);
+  const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
+
+  // Clear contact selection if moving away from CRM
+  const handleNavChange = (item: NavigationItem) => {
+    setActiveItem(item);
+    if (item !== 'CRM') {
+      setSelectedContactId(null);
+    }
+  };
+
+  const selectedContact = useMemo(() => 
+    mockContacts.find(c => c.id === selectedContactId), 
+    [selectedContactId]
+  );
 
   const renderMainContent = () => {
     switch (activeItem) {
       case 'Dashboard':
         return <Dashboard />;
       case 'CRM':
-        return <CRM />;
+        return <CRM onSelectContact={setSelectedContactId} selectedContactId={selectedContactId} />;
       case 'Analysis':
         return <Analysis />;
       default:
@@ -27,7 +41,7 @@ const App: React.FC = () => {
               <h2 className="text-3xl font-serif mb-4">{activeItem}</h2>
               <p className="text-gray-400 max-w-xs mx-auto">This module is currently initializing in the neural mesh. Please check back shortly.</p>
               <button 
-                onClick={() => setActiveItem('Dashboard')}
+                onClick={() => handleNavChange('Dashboard')}
                 className="mt-8 px-6 py-2 bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded-full"
               >
                 Return to Command
@@ -41,18 +55,20 @@ const App: React.FC = () => {
   return (
     <div className="flex h-screen w-full bg-[#fcfcfc] text-black overflow-hidden">
       {/* Left Panel - Context */}
-      <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
+      <Sidebar activeItem={activeItem} setActiveItem={handleNavChange} />
       
       {/* Main Panel - Work */}
       <main className="flex-1 flex flex-col relative overflow-hidden">
         {renderMainContent()}
       </main>
 
-      {/* Right Panel - Intelligence */}
+      {/* Right Panel - Intelligence / Contact Profile */}
       <IntelligencePanel 
         isVisible={showIntelligence} 
         onClose={() => setShowIntelligence(false)} 
         activeItem={activeItem}
+        selectedContact={selectedContact}
+        onClearSelection={() => setSelectedContactId(null)}
       />
 
       {/* Toggle Mobile Intelligence */}

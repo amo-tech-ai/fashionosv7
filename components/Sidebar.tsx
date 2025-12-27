@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   LayoutDashboard, 
@@ -23,6 +22,7 @@ interface SidebarProps {
 
 const navItems: { label: NavigationItem; icon: React.ReactNode }[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+  { label: 'CRM', icon: <Users size={18} /> },
   { label: 'Analysis', icon: <BarChart3 size={18} /> },
   { label: 'Profile', icon: <UserCircle size={18} /> },
   { label: 'Calendar', icon: <Calendar size={18} /> },

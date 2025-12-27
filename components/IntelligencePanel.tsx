@@ -6,7 +6,6 @@ import {
   ShieldCheck, 
   Globe, 
   ArrowUpRight, 
-  Eye, 
   Search,
   MessageSquareShare,
   X,
@@ -14,19 +13,27 @@ import {
   TrendingUp,
   Zap,
   Clock,
-  Briefcase,
-  Layers
+  Briefcase
 } from 'lucide-react';
 import { getFashionIntelligence, getTrendIntelligence } from '../services/geminiService';
-import { NavigationItem } from '../types';
+import { NavigationItem, Contact } from '../types';
+import { CRMContactPanel } from './CRM/CRMContactPanel';
 
 interface IntelligencePanelProps {
   isVisible: boolean;
   onClose: () => void;
   activeItem: NavigationItem;
+  selectedContact?: Contact | null;
+  onClearSelection?: () => void;
 }
 
-export const IntelligencePanel: React.FC<IntelligencePanelProps> = ({ isVisible, onClose, activeItem }) => {
+export const IntelligencePanel: React.FC<IntelligencePanelProps> = ({ 
+  isVisible, 
+  onClose, 
+  activeItem,
+  selectedContact,
+  onClearSelection
+}) => {
   const [insights, setInsights] = useState<any[]>([]);
   const [trendInsights, setTrendInsights] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,6 +59,17 @@ export const IntelligencePanel: React.FC<IntelligencePanelProps> = ({ isVisible,
     fetchTrends();
   }, [activeItem]);
 
+  // If a CRM contact is selected, show the Contact Panel instead of generic intelligence
+  if (selectedContact && activeItem === 'CRM') {
+    return (
+      <aside className={`fixed lg:relative inset-y-0 right-0 w-80 bg-white border-l border-gray-100 transform transition-transform duration-300 ease-in-out z-40 ${isVisible ? 'translate-x-0' : 'translate-x-full lg:hidden'}`}>
+        <div className="h-full p-6 no-scrollbar overflow-hidden">
+          <CRMContactPanel contact={selectedContact} onClose={onClearSelection || (() => {})} />
+        </div>
+      </aside>
+    );
+  }
+
   return (
     <aside className={`fixed lg:relative inset-y-0 right-0 w-80 bg-white border-l border-gray-100 transform transition-transform duration-300 ease-in-out z-40 ${isVisible ? 'translate-x-0' : 'translate-x-full lg:hidden'}`}>
       <div className="h-full flex flex-col p-6 no-scrollbar overflow-y-auto">
@@ -67,15 +85,15 @@ export const IntelligencePanel: React.FC<IntelligencePanelProps> = ({ isVisible,
         </div>
 
         <div className="space-y-8">
-          {/* CRM Specific Intelligence */}
-          {activeItem === 'CRM' && (
+          {/* CRM Specific Intelligence (Default if no contact selected) */}
+          {activeItem === 'CRM' && !selectedContact && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
               {/* Deals Pipeline */}
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2 text-zinc-900">
                     <Briefcase size={14} />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Pipeline Pipeline</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Pipeline</span>
                   </div>
                 </div>
                 <div className="space-y-4">
@@ -174,9 +192,8 @@ export const IntelligencePanel: React.FC<IntelligencePanelProps> = ({ isVisible,
               <button className="w-full text-left px-4 py-3 bg-white border border-black text-black rounded text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center justify-between">
                 Scan Style Compliance
               </button>
-              <button className="w-full text-left px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-100 rounded text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-100 transition-colors flex items-center justify-between">
-                Deep Market Research
-                <Search size={12} />
+              <button className="px-6 py-2 border border-gray-100 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors">
+                Deep Research
               </button>
             </div>
           </div>
